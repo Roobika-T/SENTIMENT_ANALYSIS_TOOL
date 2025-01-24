@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Sentiment Analysis Tool</h1>
+    <form id="sentiment-form">
+        <textarea name="text" id="text" placeholder="Enter your text here..."></textarea>
+        <button type="submit">Analyze</button>
+    </form>
+    <div id="result"></div>
+    <script>
+        document.getElementById('sentiment-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            fetch('/analyze', {
+                method: 'POST',
+                body: new FormData(this)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerHTML = `
+                    <h2>Sentiment: ${data.sentiment}</h2>
+                    <img src="data:image/png;base64,${data.plot_url}" alt="Sentiment scores">
+                `;
+            });
+        });
+    </script>
+</body>
+</html>
